@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Dimensions, Image, StatusBar, ImageBackground } from 'react-native';
-import { LinearGradient,BlurView } from 'expo'
+import { LinearGradient, BlurView } from 'expo'
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -29,17 +29,16 @@ export default class HomePage extends Component {
         return (
             <View style={{ flex: 1 }}>
                 <LinearGradient colors={['#141E30', '#243B55']} style={{ flex: 1 }}>
-                    <StatusBar barStyle='light-content' />
+                    <StatusBar barStyle='dark-content' />
                     <View style={{ flex: 1 }}>
-                    <View style={{ flex: 1}}>
-
-                    </View>
+                        <View style={{ flex: 1 }}>
+                        </View>
                         <View style={{ flex: 4 }}>
                         </View>
                         <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'top' }}>
-                            <View style={styles.outerCircle}>      
+                            <View style={styles.outerCircle}>
                                 <View style={styles.circle}>
-                                </View>                              
+                                </View>
                             </View>
                         </View>
                     </View>
