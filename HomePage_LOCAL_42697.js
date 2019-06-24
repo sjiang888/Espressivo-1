@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Dimensions, Image, StatusBar, ImageBackground } from 'react-native';
-import { LinearGradient } from 'expo'
-
+import { LinearGradient, BlurView } from 'expo'
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
     circle: {
-        width: 0.2*screenWidth,
-        height: 0.2*screenWidth,
-        borderRadius: 0.2*screenWidth/2,
-        borderWidth: 4,
+        width: 0.2 * screenWidth,
+        height: 0.2 * screenWidth,
+        borderRadius: 0.2 * screenWidth / 2,
+        borderWidth: '4',
         borderColor: '#74EBD5',
-        alignItems:'center',justifyContent:'center'       
+        alignItems: 'center', justifyContent: 'center'
     },
-    outerCircle:{
-        width: 0.2*screenWidth+13,
-        height: 0.2*screenWidth+13,
-        borderRadius: (0.2*screenWidth+13)/2,
-        borderWidth:4,
+    outerCircle: {
+        width: 0.2 * screenWidth + 13,
+        height: 0.2 * screenWidth + 13,
+        borderRadius: (0.2 * screenWidth + 13) / 2,
+        borderWidth: '4',
         borderColor: 'white',
-        alignItems:'center',justifyContent:'center' 
+        alignItems: 'center', justifyContent: 'center'
     }
 })
 
@@ -30,7 +29,7 @@ export default class HomePage extends Component {
         return (
             <View style={{ flex: 1 }}>
                 <LinearGradient colors={['#141E30', '#243B55']} style={{ flex: 1 }}>
-                    <StatusBar barStyle='light-content' />
+                    <StatusBar barStyle='dark-content' />
                     <View style={{ flex: 1 }}>
                         <View style={{ flex: 1 }}>
                         </View>

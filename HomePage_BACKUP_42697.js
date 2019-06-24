@@ -1,8 +1,6 @@
-<<<<<<< HEAD
 import React, { Component } from 'react';
 import { StyleSheet, View, Text, Dimensions, Image, StatusBar, ImageBackground } from 'react-native';
 import { LinearGradient, BlurView } from 'expo'
-=======
 import React, { Component, PureComponent } from 'react';
 import { StyleSheet, View, Text, Dimensions, Image, StatusBar, ImageBackground, FlatList, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'
@@ -10,7 +8,6 @@ import { Audio } from 'expo-av';
 import Songs, { extractKey } from './dataBase/MockData';
 import { HitTestResultTypes } from './node_modules/expo/build/AR';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
->>>>>>> 9b2f24e30946feec37fe7c5d582d2958969d950d
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -61,12 +58,12 @@ const styles = StyleSheet.create({
     },
 
     DeleteIcon: {
-        height: screenHeight * 0.02 * 18/14,
+        height: screenHeight * 0.02 * 18 / 14,
         width: screenHeight * 0.02,
     },
 
     PlayIcon: {
-        height: screenHeight * 0.03 * 25/20,
+        height: screenHeight * 0.03 * 25 / 20,
         width: screenHeight * 0.03,
     },
 })
@@ -100,14 +97,14 @@ export default class HomePage extends Component {
             // An error occurred!
         }
     }
-    
+
     pauseSong = async () => {
         try {
             await player.pauseAsync();
             this.setState({
                 isPlaying: false
             });
-        } catch (error) {}
+        } catch (error) { }
     }
 
     _renderItem = ({ item }) => {
@@ -116,7 +113,7 @@ export default class HomePage extends Component {
             <TouchableOpacity onPress={() => this.onPressAction(item)}>
                 {(item.id == this.state.selectedId)
                     ? <View style={[styles.row, { backgroundColor: '#475364' }]}>
-                        <View style={{ flexDirection: 'row', flex: 1}}>
+                        <View style={{ flexDirection: 'row', flex: 1 }}>
                             <Text style={styles.songName}>{item.name}</Text>
                             <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
                                 <Image
@@ -137,16 +134,16 @@ export default class HomePage extends Component {
                         <View style={{ height: (38 / 812) * screenHeight, marginBottom: (12 / 812) * screenHeight, marginTop: (16 / 812) * screenHeight, justifyContent: 'center' }}>
                             {(this.state.isPlaying && this.state.playingItemId == item.id)
                                 ? <TouchableOpacity onPress={this.pauseSong} style={{ alignSelf: 'center' }}>
-                                        <Image
-                                            source={require('./assets/images/Pause.png')}
-                                            style={styles.PlayIcon}
-                                        />                                   
+                                    <Image
+                                        source={require('./assets/images/Pause.png')}
+                                        style={styles.PlayIcon}
+                                    />
                                 </TouchableOpacity>
-                                : <TouchableOpacity onPress={() => this.playSong(item)} style={{ alignSelf: 'center' }}>                                  
-                                        <Image
-                                            source={require('./assets/images/Play.png')}
-                                            style={styles.PlayIcon}
-                                        />                                    
+                                : <TouchableOpacity onPress={() => this.playSong(item)} style={{ alignSelf: 'center' }}>
+                                    <Image
+                                        source={require('./assets/images/Play.png')}
+                                        style={styles.PlayIcon}
+                                    />
                                 </TouchableOpacity>
                             }
                         </View>
@@ -172,13 +169,10 @@ export default class HomePage extends Component {
             <View style={{ flex: 1 }}>
                 <LinearGradient colors={['#141E30', '#243B55']} style={{ flex: 1 }}>
                     <StatusBar barStyle='dark-content' />
-                    <View style={{ flex: 1 }}>
-<<<<<<< HEAD
+                    <View style={{ flex: 1 }}/>
                         <View style={{ flex: 1 }}>
                         </View>
-=======
                         <View style={{ flex: 1 }} />
->>>>>>> 9b2f24e30946feec37fe7c5d582d2958969d950d
                         <View style={{ flex: 4 }}>
                             <FlatList
                                 style={styles.ListContainer}
@@ -188,19 +182,16 @@ export default class HomePage extends Component {
                                 keyExtractor={extractKey}
                             />
                         </View>
-<<<<<<< HEAD
                         <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'top' }}>
-=======
-                        <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-start', marginTop: screenHeight * 0.02 }}>
->>>>>>> 9b2f24e30946feec37fe7c5d582d2958969d950d
-                            <View style={styles.outerCircle}>
-                                <View style={styles.circle}>
+                            <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-start', marginTop: screenHeight * 0.02 }}>
+                                <View style={styles.outerCircle}>
+                                    <View style={styles.circle}>
+                                    </View>
                                 </View>
                             </View>
                         </View>
-                    </View>
                 </LinearGradient>
             </View>
-        );
-    }
-}
+                );
+            }
+        }

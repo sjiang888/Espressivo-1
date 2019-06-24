@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import React, { Component } from 'react';
-import { StyleSheet, View, Text, Dimensions, Image, StatusBar, ImageBackground } from 'react-native';
-import { LinearGradient, BlurView } from 'expo'
-=======
 import React, { Component, PureComponent } from 'react';
 import { StyleSheet, View, Text, Dimensions, Image, StatusBar, ImageBackground, FlatList, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'
@@ -10,7 +5,6 @@ import { Audio } from 'expo-av';
 import Songs, { extractKey } from './dataBase/MockData';
 import { HitTestResultTypes } from './node_modules/expo/build/AR';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
->>>>>>> 9b2f24e30946feec37fe7c5d582d2958969d950d
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -171,14 +165,9 @@ export default class HomePage extends Component {
         return (
             <View style={{ flex: 1 }}>
                 <LinearGradient colors={['#141E30', '#243B55']} style={{ flex: 1 }}>
-                    <StatusBar barStyle='dark-content' />
+                    <StatusBar barStyle='light-content' />
                     <View style={{ flex: 1 }}>
-<<<<<<< HEAD
-                        <View style={{ flex: 1 }}>
-                        </View>
-=======
                         <View style={{ flex: 1 }} />
->>>>>>> 9b2f24e30946feec37fe7c5d582d2958969d950d
                         <View style={{ flex: 4 }}>
                             <FlatList
                                 style={styles.ListContainer}
@@ -188,11 +177,7 @@ export default class HomePage extends Component {
                                 keyExtractor={extractKey}
                             />
                         </View>
-<<<<<<< HEAD
-                        <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'top' }}>
-=======
                         <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-start', marginTop: screenHeight * 0.02 }}>
->>>>>>> 9b2f24e30946feec37fe7c5d582d2958969d950d
                             <View style={styles.outerCircle}>
                                 <View style={styles.circle}>
                                 </View>
