@@ -77,7 +77,8 @@ const HomeStack = createStackNavigator(
                         style={{
                         fontSize: 20,
                         color: 'white',
-                        fontFamily:'Helvetica Neue'
+                            fontFamily: 'Helvetica Neue',
+                            fontWeight: 'bold',
                     }}>
                         Songs
                     </Text>

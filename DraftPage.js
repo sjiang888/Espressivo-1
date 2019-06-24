@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
         width: 0.2*screenWidth,
         height: 0.2*screenWidth,
         borderRadius: 0.2*screenWidth/2,
-        borderWidth:'4',
+        borderWidth: 4,
         borderColor: '#74EBD5',
         alignItems:'center',justifyContent:'center'       
     },
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         width: 0.2*screenWidth+13,
         height: 0.2*screenWidth+13,
         borderRadius: (0.2*screenWidth+13)/2,
-        borderWidth:'4',
+        borderWidth:4,
         borderColor: 'white',
         alignItems:'center',justifyContent:'center' 
     }
