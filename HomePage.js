@@ -5,6 +5,7 @@ import { Audio } from 'expo-av';
 import Songs, { extractKey } from './dataBase/MockData';
 import { HitTestResultTypes } from './node_modules/expo/build/AR';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import { BlurView } from 'expo-blur';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
@@ -12,6 +13,13 @@ const screenWidth = Dimensions.get('window').width;
 const player = new Audio.Sound();
 
 const styles = StyleSheet.create({
+    Title:{
+        fontSize:36,
+        fontWeight:'bold',
+        fontFamily:'Helvetica Neue',
+        color:'white'
+
+    },
     circle: {
         width: 0.2 * screenWidth,
         height: 0.2 * screenWidth,
@@ -55,14 +63,23 @@ const styles = StyleSheet.create({
     },
 
     DeleteIcon: {
-        height: screenHeight * 0.02 * 18/14,
+        height: screenHeight * 0.02 * 18 / 14,
         width: screenHeight * 0.02,
     },
 
     PlayIcon: {
-        height: screenHeight * 0.03 * 25/20,
+        height: screenHeight * 0.03 * 25 / 20,
         width: screenHeight * 0.03,
     },
+    ProgressCircle: {
+        width: 14,
+        height: 14,
+        borderRadius: 7,
+        backgroundColor: 'white',
+        borderWidth: 2,
+        borderColor: '#A8F5FF',
+
+    }
 })
 
 export default class HomePage extends Component {
@@ -94,14 +111,14 @@ export default class HomePage extends Component {
             // An error occurred!
         }
     }
-    
+
     pauseSong = async () => {
         try {
             await player.pauseAsync();
             this.setState({
                 isPlaying: false
             });
-        } catch (error) {}
+        } catch (error) { }
     }
 
     _renderItem = ({ item }) => {
@@ -110,7 +127,7 @@ export default class HomePage extends Component {
             <TouchableOpacity onPress={() => this.onPressAction(item)}>
                 {(item.id == this.state.selectedId)
                     ? <View style={[styles.row, { backgroundColor: '#475364' }]}>
-                        <View style={{ flexDirection: 'row', flex: 1}}>
+                        <View style={{ flexDirection: 'row', flex: 1 }}>
                             <Text style={styles.songName}>{item.name}</Text>
                             <View style={{ flex: 1, alignItems: 'flex-end', justifyContent: 'center' }}>
                                 <Image
@@ -125,22 +142,40 @@ export default class HomePage extends Component {
                                 <Text style={[styles.songName, styles.songAttributes]}>{item.length}</Text>
                             </View>
                         </View>
-                        <View style={{ height: (35 / 812) * screenHeight, marginTop: (18 / 812) * screenHeight }}>
+                        <View style={{ height: (38 / 812) * screenHeight, marginTop: (18 / 812) * screenHeight }}>
+                        <View style={{flexDirection:'row',flex:1,justifyContent:'space-between'}}>
+                            <Text style={{fontSize:14,color:'#A8F5FF'}}>
+                                00:03
+                            </Text>
+                            <Text style={{fontSize:14,color:'#ACB6E5'}}>
+                                00:10
+                            </Text>
+                        </View>
 
+                            <View style={{ height: 2, backgroundColor: '#D3D3D3',}}>
+                                <LinearGradient colors={['#74EBD5', '#ACB6E5']} start={[0, 1]} end={[1, 0]} style={{ height: 2, width: 100 }}>
+                                
+
+                                </LinearGradient>
+                            </View>
+                            <View style={{ justifyContent: 'flex-end',height:6}}>
+                                <View style={[styles.ProgressCircle]}>
+                                </View>
+                            </View>
                         </View>
                         <View style={{ height: (38 / 812) * screenHeight, marginBottom: (12 / 812) * screenHeight, marginTop: (16 / 812) * screenHeight, justifyContent: 'center' }}>
                             {(this.state.isPlaying && this.state.playingItemId == item.id)
                                 ? <TouchableOpacity onPress={this.pauseSong} style={{ alignSelf: 'center' }}>
-                                        <Image
-                                            source={require('./assets/images/Pause.png')}
-                                            style={styles.PlayIcon}
-                                        />                                   
+                                    <Image
+                                        source={require('./assets/images/Pause.png')}
+                                        style={styles.PlayIcon}
+                                    />
                                 </TouchableOpacity>
-                                : <TouchableOpacity onPress={() => this.playSong(item)} style={{ alignSelf: 'center' }}>                                  
-                                        <Image
-                                            source={require('./assets/images/Play.png')}
-                                            style={styles.PlayIcon}
-                                        />                                    
+                                : <TouchableOpacity onPress={() => this.playSong(item)} style={{ alignSelf: 'center' }}>
+                                    <Image
+                                        source={require('./assets/images/Play.png')}
+                                        style={styles.PlayIcon}
+                                    />
                                 </TouchableOpacity>
                             }
                         </View>
@@ -167,7 +202,11 @@ export default class HomePage extends Component {
                 <LinearGradient colors={['#141E30', '#243B55']} style={{ flex: 1 }}>
                     <StatusBar barStyle='light-content' />
                     <View style={{ flex: 1 }}>
-                        <View style={{ flex: 1 }} />
+                        <View style={{ flex: 1 ,justifyContent:'flex-end',paddingLeft:0.05*screenWidth,paddingBottom:0.01*screenHeight}}>
+                        <Text style={styles.Title}>
+                            Songs
+                        </Text>
+                        </View>
                         <View style={{ flex: 4 }}>
                             <FlatList
                                 style={styles.ListContainer}
@@ -177,7 +216,7 @@ export default class HomePage extends Component {
                                 keyExtractor={extractKey}
                             />
                         </View>
-                        <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-start', marginTop: screenHeight * 0.02 }}>
+                        <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-start', marginTop: screenHeight * 0.02 }}onPress={()=>this.props.navigation.navigate('Customization')}>
                             <View style={styles.outerCircle}>
                                 <View style={styles.circle}>
                                 </View>
