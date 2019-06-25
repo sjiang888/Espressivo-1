@@ -2,6 +2,7 @@ import { createStackNavigator, createAppContainer, createBottomTabNavigator } fr
 import { View, Text, Image, Dimensions } from 'react-native';
 import HomePage from './HomePage';
 import DraftPage from './DraftPage';
+import Customization from './Customization';
 import React from 'react';
 import { Header } from 'react-navigation';
 
@@ -41,24 +42,9 @@ const HomeStack = createStackNavigator(
                         fontFamily:'Helvetica Neue',
                         
                     }}>
-                        Draft
+                        Drafts
                     </Text>
                 ),
-                headerLeft: (
-                    <Text style={{
-                        fontSize: 42,
-                        color: 'white',
-                        fontFamily:'Helvetica Neue',
-                        fontWeight:'bold'
-                    }}>
-                        Songs
-                    </Text>
-                ),
-                headerLeftContainerStyle: {
-                    marginTop: screenHeight * 0.05,
-                    height: 50,
-                    backgroundColor: 'transparent'
-                },
                 headerTransparent: 'true'
 
             })
@@ -78,33 +64,47 @@ const HomeStack = createStackNavigator(
                         fontSize: 20,
                         color: 'white',
                             fontFamily: 'Helvetica Neue',
-                            fontWeight: 'bold',
+                            
                     }}>
                         Songs
                     </Text>
                 ),
-                headerLeft: (
-                    <Text style={{
-                        fontSize: 42,
-                        color: 'white',
-                        fontFamily:'Helvetica Neue',
-                        fontWeight:'bold'
-                    }}>
-                        Draft
-                    </Text>
-                ),
-                headerLeftContainerStyle: {
-                    marginTop: screenHeight * 0.05,
-                    height: 50,
-                    backgroundColor: 'transparent'
-                },
                 headerTransparent: 'true'
 
             })           
-        }
+        },
+        Customization:{
+            screen: Customization,
+            navigationOptions: ({navigation})=>({
+                header: props => <CustomHeader {...props} />,
+
+                headerStyle: {
+                    backgroundColor: 'transparent',
+                    borderBottomWidth: 0,
+                },
+                headerRight: (
+                    <Text onPress={()=>navigation.navigate('HomePage')}
+                        style={{
+                        fontSize: 20,
+                        color: 'white',
+                            fontFamily: 'Helvetica Neue',
+                            
+                    }}>
+                        Exit
+                    </Text>
+                ),
+                headerLeft:(
+                    <Image source={require('./assets/images/Backward.png')} style={{height:0.02*screenHeight, width:0.02*screenHeight}}/>
+                ),
+
+                headerTransparent: 'true'
+
+            })           
+        },
+
     },
     {
-        initialRouteName: 'HomePage',
+        initialRouteName: 'Customization',
     },
 
 );
