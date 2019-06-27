@@ -2,7 +2,7 @@ import React, { Component, PureComponent } from 'react';
 import { StyleSheet, View, Text, Dimensions, Image, StatusBar, ImageBackground, FlatList, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient'
 import { Audio } from 'expo-av';
-import Songs, { extractKey } from './dataBase/MockData';
+import Songs, { extractKey } from './dataBase/MockDataSong';
 import { HitTestResultTypes } from './node_modules/expo/build/AR';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { BlurView } from 'expo-blur';
@@ -10,14 +10,12 @@ import { BlurView } from 'expo-blur';
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-const player = new Audio.Sound();
-
 const styles = StyleSheet.create({
-    Title:{
-        fontSize:36,
-        fontWeight:'bold',
-        fontFamily:'Helvetica Neue',
-        color:'white'
+    Title: {
+        fontSize: 36,
+        fontWeight: 'bold',
+        fontFamily: 'Helvetica Neue',
+        color: 'white'
 
     },
     circle: {
@@ -40,7 +38,6 @@ const styles = StyleSheet.create({
         marginHorizontal: screenWidth * 0.05,
     },
     row: {
-        backgroundColor: 'transparent',
         minHeight: (90 / 812) * screenHeight,
         flexDirection: 'column',
         padding: screenHeight * 0.01,
@@ -84,12 +81,24 @@ const styles = StyleSheet.create({
 
 export default class HomePage extends Component {
 
-    state = {
-        Songs: Songs,
-        selectedId: -1,
-        isPlaying: false,
-        playingItemId: -1,
-    };
+    constructor(props) {
+        super(props)
+        this.sound = null;
+        this.state = {
+            Songs: Songs,
+            selectedId: -1,
+            isPlaying: false,
+            playingItemId: -1,
+            isPausing: false,
+            isPlaybackAllowed: false,
+            soundPosition: null,
+            soundDuration: null,
+            shouldPlay: false,
+            isPlaying: false,
+        };
+    }
+
+
 
     onPressAction = (item) => {
         this.setState({
@@ -99,11 +108,18 @@ export default class HomePage extends Component {
 
     playSong = async (item) => {
         try {
-            await player.unloadAsync();
-            await player.loadAsync(item.path);
-            await player.playAsync();
+            if (this.sound != null) {
+                await this.sound.unloadAsync();
+            }
+            const { sound } = await Audio.Sound.createAsync(
+                item.path,
+                {
+                    shouldPlay: true,
+                },
+                this._updateScreenForSoundStatus,
+            );
+            this.sound = sound;
             this.setState({
-                isPlaying: true,
                 playingItemId: item.id,
             });
             // Your sound is playing!
@@ -114,12 +130,42 @@ export default class HomePage extends Component {
 
     pauseSong = async () => {
         try {
-            await player.pauseAsync();
+            await this.sound.pauseAsync();
             this.setState({
-                isPlaying: false
+                isPausing: true
             });
         } catch (error) { }
     }
+
+    unpauseSong = async () => {
+        try {
+            await this.sound.playAsync();
+            this.setState({
+                isPausing: false,
+            });
+        } catch (error) { }
+    }
+
+    _updateScreenForSoundStatus = (status) => {
+        if (status.isLoaded) {
+            this.setState({
+                soundDuration: status.durationMillis,
+                soundPosition: status.positionMillis,
+                shouldPlay: status.shouldPlay,
+                isPlaying: status.isPlaying,
+                isPlaybackAllowed: true,
+            });
+        } else {
+            this.setState({
+                soundDuration: null,
+                soundPosition: null,
+                isPlaybackAllowed: false,
+            });
+            if (status.error) {
+                Alert(`FATAL PLAYER ERROR: ${status.error}`);
+            }
+        }
+    };
 
     _renderItem = ({ item }) => {
 
@@ -143,22 +189,22 @@ export default class HomePage extends Component {
                             </View>
                         </View>
                         <View style={{ height: (38 / 812) * screenHeight, marginTop: (18 / 812) * screenHeight }}>
-                        <View style={{flexDirection:'row',flex:1,justifyContent:'space-between'}}>
-                            <Text style={{fontSize:14,color:'#A8F5FF'}}>
-                                00:03
+                            <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
+                                <Text style={{ fontSize: 14, color: '#A8F5FF' }}>
+                                    00:03
                             </Text>
-                            <Text style={{fontSize:14,color:'#ACB6E5'}}>
-                                00:10
+                                <Text style={{ fontSize: 14, color: '#ACB6E5' }}>
+                                    00:10
                             </Text>
-                        </View>
+                            </View>
 
-                            <View style={{ height: 2, backgroundColor: '#D3D3D3',}}>
+                            <View style={{ height: 2, backgroundColor: '#D3D3D3', }}>
                                 <LinearGradient colors={['#74EBD5', '#ACB6E5']} start={[0, 1]} end={[1, 0]} style={{ height: 2, width: 100 }}>
-                                
+
 
                                 </LinearGradient>
                             </View>
-                            <View style={{ justifyContent: 'flex-end',height:6}}>
+                            <View style={{ justifyContent: 'flex-end', height: 6 }}>
                                 <View style={[styles.ProgressCircle]}>
                                 </View>
                             </View>
@@ -171,7 +217,7 @@ export default class HomePage extends Component {
                                         style={styles.PlayIcon}
                                     />
                                 </TouchableOpacity>
-                                : <TouchableOpacity onPress={() => this.playSong(item)} style={{ alignSelf: 'center' }}>
+                                : <TouchableOpacity onPress={(this.state.isPausing && this.state.playingItemId == item.id) ? (this.unpauseSong) : (() => this.playSong(item))} style={{ alignSelf: 'center' }}>
                                     <Image
                                         source={require('./assets/images/Play.png')}
                                         style={styles.PlayIcon}
@@ -202,9 +248,9 @@ export default class HomePage extends Component {
                 <LinearGradient colors={['#141E30', '#243B55']} style={{ flex: 1 }}>
                     <StatusBar barStyle='light-content' />
                     <View style={{ flex: 1 }}>
-                        <View style={{ flex: 1 ,justifyContent:'flex-end',paddingLeft:0.05*screenWidth,paddingBottom:0.01*screenHeight}}>
-                        <Text style={styles.Title}>
-                            Songs
+                        <View style={{ flex: 1, justifyContent: 'flex-end', paddingLeft: 0.05 * screenWidth, paddingBottom: 0.01 * screenHeight }}>
+                            <Text style={styles.Title}>
+                                Songs
                         </Text>
                         </View>
                         <View style={{ flex: 4 }}>
@@ -216,11 +262,13 @@ export default class HomePage extends Component {
                                 keyExtractor={extractKey}
                             />
                         </View>
-                        <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-start', marginTop: screenHeight * 0.02 }}onPress={()=>this.props.navigation.navigate('Customization')}>
-                            <View style={styles.outerCircle}>
-                                <View style={styles.circle}>
+                        <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-start', marginTop: screenHeight * 0.02 }} onPress={() => this.props.navigation.navigate('Customization')}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('Customization')}>
+                                <View style={styles.outerCircle}>
+                                    <View style={styles.circle}>
+                                    </View>
                                 </View>
-                            </View>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </LinearGradient>

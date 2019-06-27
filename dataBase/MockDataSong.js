@@ -1,6 +1,3 @@
-import React from 'react';
-import { View } from "react-native";
-
 const Songs = [
     { id: 0, name: 'Song', path: require('../assets/music/Happy.mp3'), creationDate:'03/30/2019', length:'01:00' },
     { id: 1, name: 'Song', path: require('../assets/music/Sad.mp3'), creationDate: '03/30/2019', length: '00:42' },
