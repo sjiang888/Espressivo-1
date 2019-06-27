@@ -2,6 +2,7 @@ import { createStackNavigator, createAppContainer, createBottomTabNavigator } fr
 import { View, Text, Image, Dimensions, TouchableOpacity } from 'react-native';
 import HomePage from './HomePage';
 import DraftPage from './DraftPage';
+import FinishPage from './FinishPage';
 import Customization from './Customization';
 import React from 'react';
 import { Header } from 'react-navigation';
@@ -107,6 +108,34 @@ const HomeStack = createStackNavigator(
                 headerTransparent: 'true'
 
             })
+        },
+        FinishPage:{
+            screen: FinishPage,
+            navigationOptions: ({navigation})=>({
+                header: props => <CustomHeader {...props} />,
+
+                headerStyle: {
+                    backgroundColor: 'transparent',
+                    borderBottomWidth: 0,
+                },
+                headerRight: (
+                    <Text onPress={()=>navigation.navigate('HomePage')}
+                        style={{
+                        fontSize: 20,
+                        color: 'white',
+                            fontFamily: 'Helvetica Neue',
+                            
+                    }}>
+                        Exit
+                    </Text>
+                ),
+                headerLeft:(
+                    <Image source={require('./assets/images/Backward.png')} style={{height:0.02*screenHeight, width:0.02*screenHeight}}/>
+                ),
+
+                headerTransparent: 'true'
+
+            })           
         },
 
     },
