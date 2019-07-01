@@ -4,6 +4,7 @@ import HomePage from './HomePage';
 import DraftPage from './DraftPage';
 import FinishPage from './FinishPage';
 import Customization from './Customization';
+import RecordingPage from './RecordingPage';
 import React from 'react';
 import { Header } from 'react-navigation';
 
@@ -46,7 +47,7 @@ const HomeStack = createStackNavigator(
                         Drafts
                     </Text>
                 ),
-                headerLeft: false,
+                headerLeft: <View />,
                 headerTransparent: 'true'
 
             })
@@ -71,6 +72,20 @@ const HomeStack = createStackNavigator(
                         Songs
                     </Text>
                 ),
+                headerLeft: <View/>,
+                headerTransparent: 'true'
+
+            })
+        },
+        RecordingPage: {
+            screen: RecordingPage,
+            navigationOptions: ({ navigation }) => ({
+                header: props => <CustomHeader {...props} />,
+
+                headerStyle: {
+                    backgroundColor: 'transparent',
+                    borderBottomWidth: 0,
+                },
                 headerLeft: (
                     <TouchableOpacity onPress={() => { navigation.goBack() }}>
                         <Image source={require('./assets/images/Backward.png')} style={{ height: 0.03 * screenHeight, width: 0.03 * screenHeight }} />
@@ -132,7 +147,11 @@ const HomeStack = createStackNavigator(
                 headerLeft:(
                     <Image source={require('./assets/images/Backward.png')} style={{height:0.02*screenHeight, width:0.02*screenHeight}}/>
                 ),
-
+                headerLeft: (
+                    <TouchableOpacity onPress={() => { navigation.goBack() }}>
+                        <Image source={require('./assets/images/Backward.png')} style={{ height: 0.03 * screenHeight, width: 0.03 * screenHeight }} />
+                    </TouchableOpacity>
+                ),
                 headerTransparent: 'true'
 
             })           

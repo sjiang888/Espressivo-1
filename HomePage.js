@@ -5,79 +5,12 @@ import { Audio } from 'expo-av';
 import Songs, { extractKey } from './dataBase/MockDataSong';
 import { HitTestResultTypes } from './node_modules/expo/build/AR';
 import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
-import { BlurView } from 'expo-blur';
+import { BlurView } from "expo-blur";
+import Slider from "react-native-slider";
+import { styles } from './_StyleSheet';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
-
-const styles = StyleSheet.create({
-    Title: {
-        fontSize: 36,
-        fontWeight: 'bold',
-        fontFamily: 'Helvetica Neue',
-        color: 'white'
-
-    },
-    circle: {
-        width: 0.2 * screenWidth,
-        height: 0.2 * screenWidth,
-        borderRadius: 0.2 * screenWidth / 2,
-        borderWidth: 4,
-        borderColor: '#74EBD5',
-        alignItems: 'center', justifyContent: 'center'
-    },
-    outerCircle: {
-        width: 0.2 * screenWidth + 13,
-        height: 0.2 * screenWidth + 13,
-        borderRadius: (0.2 * screenWidth + 13) / 2,
-        borderWidth: 4,
-        borderColor: 'white',
-        alignItems: 'center', justifyContent: 'center'
-    },
-    ListContainer: {
-        marginHorizontal: screenWidth * 0.05,
-    },
-    row: {
-        minHeight: (90 / 812) * screenHeight,
-        flexDirection: 'column',
-        padding: screenHeight * 0.01,
-        borderBottomColor: '#CCCCCC',
-        borderBottomWidth: 1,
-    },
-
-    songName: {
-        color: 'white',
-        marginTop: screenHeight * 0.007,
-        fontSize: 22,
-        fontFamily: 'Helvetica Neue',
-        fontWeight: 'bold',
-    },
-
-    songAttributes: {
-        color: '#CCCCCC',
-        fontSize: 14,
-        fontWeight: 'normal',
-    },
-
-    DeleteIcon: {
-        height: screenHeight * 0.02 * 18 / 14,
-        width: screenHeight * 0.02,
-    },
-
-    PlayIcon: {
-        height: screenHeight * 0.03 * 25 / 20,
-        width: screenHeight * 0.03,
-    },
-    ProgressCircle: {
-        width: 14,
-        height: 14,
-        borderRadius: 7,
-        backgroundColor: 'white',
-        borderWidth: 2,
-        borderColor: '#A8F5FF',
-
-    }
-})
 
 export default class HomePage extends Component {
 
@@ -95,6 +28,8 @@ export default class HomePage extends Component {
             soundDuration: null,
             shouldPlay: false,
             isPlaying: false,
+            didJustFinish: false,
+            isSliding: false,
         };
     }
 
@@ -109,12 +44,17 @@ export default class HomePage extends Component {
     playSong = async (item) => {
         try {
             if (this.sound != null) {
+                this.setState({
+                    playingItemId: -1,
+                });
                 await this.sound.unloadAsync();
             }
             const { sound } = await Audio.Sound.createAsync(
                 item.path,
                 {
                     shouldPlay: true,
+                    durationMillis: 0,
+                    //isLooping: true,
                 },
                 this._updateScreenForSoundStatus,
             );
@@ -139,8 +79,10 @@ export default class HomePage extends Component {
 
     unpauseSong = async () => {
         try {
+            await this.sound.setPositionAsync(this.state.soundPosition);
             await this.sound.playAsync();
             this.setState({
+                isSliding: false,
                 isPausing: false,
             });
         } catch (error) { }
@@ -150,11 +92,14 @@ export default class HomePage extends Component {
         if (status.isLoaded) {
             this.setState({
                 soundDuration: status.durationMillis,
-                soundPosition: status.positionMillis,
                 shouldPlay: status.shouldPlay,
                 isPlaying: status.isPlaying,
+                didJustFinish: status.didJustFinish,
                 isPlaybackAllowed: true,
             });
+            if (!this.state.isSliding) {
+                this.setState({ soundPosition: status.positionMillis })
+            };
         } else {
             this.setState({
                 soundDuration: null,
@@ -164,6 +109,31 @@ export default class HomePage extends Component {
             if (status.error) {
                 Alert(`FATAL PLAYER ERROR: ${status.error}`);
             }
+        }
+    };
+
+    soundPositionIntoMinSecForm = (soundPosition) => {
+        let soundLength = Math.trunc(soundPosition / 1000);
+        let minutes = Math.trunc(soundLength / 60);
+        let seconds = soundLength % 60;
+        let minutesText = "";
+        let secondsText = "";
+        if (minutes >= 10) {
+            minutesText = minutes + "";
+        } else {
+            minutesText = "0" + minutes;
+        }
+        if (seconds >= 10) {
+            secondsText = seconds + "";
+        } else {
+            secondsText = "0" + seconds;
+        }
+        return (minutesText + ":" + secondsText);
+    };
+
+    _onSlidingComplete = () => {
+        if (this.state.isPlaying) {
+            this.unpauseSong();
         }
     };
 
@@ -188,26 +158,49 @@ export default class HomePage extends Component {
                                 <Text style={[styles.songName, styles.songAttributes]}>{item.length}</Text>
                             </View>
                         </View>
-                        <View style={{ height: (38 / 812) * screenHeight, marginTop: (18 / 812) * screenHeight }}>
+                        <View style={{ height: (38 / 812) * screenHeight, marginVertical: (18 / 812) * screenHeight }}>
                             <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-between' }}>
-                                <Text style={{ fontSize: 14, color: '#A8F5FF' }}>
-                                    00:03
-                            </Text>
-                                <Text style={{ fontSize: 14, color: '#ACB6E5' }}>
-                                    00:10
-                            </Text>
+                                {(this.state.soundPosition == null || this.state.playingItemId != item.id)
+                                    ? <Text style={{ fontSize: 14, color: '#A8F5FF' }}>
+                                        00:00
+                                    </Text>
+                                    : <Text style={{ fontSize: 14, color: '#A8F5FF' }}>
+                                        {this.soundPositionIntoMinSecForm(this.state.soundPosition)}
+                                    </Text>
+                                }
+                                {(this.state.soundDuration == null || this.state.playingItemId != item.id)
+                                    ? <Text style={{ fontSize: 14, color: '#ACB6E5' }}>
+                                        {item.length}
+                                    </Text>
+                                    : <Text style={{ fontSize: 14, color: '#ACB6E5' }}>
+                                        {this.soundPositionIntoMinSecForm(this.state.soundDuration)}
+                                    </Text>
+                                }
                             </View>
-
-                            <View style={{ height: 2, backgroundColor: '#D3D3D3', }}>
-                                <LinearGradient colors={['#74EBD5', '#ACB6E5']} start={[0, 1]} end={[1, 0]} style={{ height: 2, width: 100 }}>
-
-
-                                </LinearGradient>
-                            </View>
-                            <View style={{ justifyContent: 'flex-end', height: 6 }}>
-                                <View style={[styles.ProgressCircle]}>
-                                </View>
-                            </View>
+                            {(this.state.playingItemId == item.id)
+                                ? <Slider
+                                    style={styles.slider}
+                                    thumbStyle={styles.ProgressCircle}
+                                    minimumValue={0}
+                                    maximumValue={this.state.soundDuration}
+                                    disabled={false}
+                                    maximumTrackTintColor='#D3D3D3'
+                                    minimumTrackTintColor='#ACB6E5'
+                                    onValueChange={soundPosition => this.setState({ soundPosition })}
+                                    onSlidingStart={() => { this.setState({ isSliding: true }) }}
+                                    onSlidingComplete={this._onSlidingComplete}
+                                    value={this.state.soundPosition}
+                                />
+                                : <Slider
+                                    style={styles.slider}
+                                    thumbStyle={styles.ProgressCircle}
+                                    minimumValue={0}
+                                    maximumValue={1}
+                                    disabled={true}
+                                    maximumTrackTintColor='#D3D3D3'
+                                    minimumTrackTintColor='#ACB6E5'
+                                />
+                            }
                         </View>
                         <View style={{ height: (38 / 812) * screenHeight, marginBottom: (12 / 812) * screenHeight, marginTop: (16 / 812) * screenHeight, justifyContent: 'center' }}>
                             {(this.state.isPlaying && this.state.playingItemId == item.id)
@@ -263,7 +256,7 @@ export default class HomePage extends Component {
                             />
                         </View>
                         <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-start', marginTop: screenHeight * 0.02 }} onPress={() => this.props.navigation.navigate('Customization')}>
-                            <TouchableOpacity onPress={() => this.props.navigation.navigate('Customization')}>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate('RecordingPage')}>
                                 <View style={styles.outerCircle}>
                                     <View style={styles.circle}>
                                     </View>

@@ -2,67 +2,12 @@ import React, { Component } from 'react';
 import { StyleSheet, View, Text, Dimensions, Image, StatusBar, ImageBackground, FlatList, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import Options, { extractKey } from './dataBase/CustomOptions';
+import { styles } from './_StyleSheet';
 
 const screenHeight = Dimensions.get('window').height;
 const screenWidth = Dimensions.get('window').width;
 
-const styles = StyleSheet.create({
-    Title: {
-        fontSize: 36,
-        fontWeight: 'bold',
-        fontFamily: 'Helvetica Neue',
-        color: 'white'
-
-    },
-    NextStep: {
-        width: (293 / 375) * screenWidth,
-        //height: (91/812)*screenHeight,
-        height: 91,
-        borderRadius: 91 / 2,
-        borderWidth: 1,
-        borderColor: '#70727D',
-        alignItems: 'center', justifyContent: 'center'
-    },
-    NextFont: {
-        fontSize: 32,
-        fontWeight: 'bold',
-        fontFamily: 'Helvetica Neue',
-        color: '#7A7A83'
-    },
-    ListContainer: {
-        marginHorizontal: screenWidth * 0.05,
-    },
-    row: {
-        minHeight: (115 / 812) * screenHeight,
-        flexDirection: 'column',
-        padding: screenHeight * 0.01,
-        borderBottomColor: '#707070',
-        borderBottomWidth: 1,
-    },
-    Options: {
-        fontSize: 30,
-        fontWeight: 'bold',
-        fontFamily: 'Helvetica Neue',
-        color: '#C7C6D5',
-        alignSelf: 'center',
-        marginVertical: screenHeight * 0.028,
-    },
-    choices: {
-        height: (42 / 812) * screenHeight,
-        width: screenWidth * 0.35,
-        borderColor: '#74EBD5',
-        borderWidth: 1,
-        borderRadius: 91 / 2,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    choicesText: {
-        fontSize: 22,
-        color: 'white',
-    },
-})
-
-export default class HomePage extends Component {
+export default class Customization extends Component {
 
     constructor(props) {
         super(props)
@@ -75,7 +20,7 @@ export default class HomePage extends Component {
             selectedMood2: 'Mood2',
             selectedGenre: 'Genre',
             selectedLength: 'Length',
-            selectedFreedom:'Robotic Freedom',
+            selectedFreedom: 'Robotic Freedom',
         };
     }
 
@@ -108,7 +53,7 @@ export default class HomePage extends Component {
             });
         }
         this.setState({
-            selectedId:-1
+            selectedId: -1
         });
     }
 
@@ -116,7 +61,7 @@ export default class HomePage extends Component {
         return (
             <TouchableOpacity onPress={() => this.onPressAction(item)}>
                 {(item.id == this.state.selectedId)
-                    ? <View style={[styles.row, { backgroundColor: '#475364' }]}>
+                    ? <View style={[styles.ChoiceRow, { backgroundColor: '#475364' }]}>
                         <Text style={[styles.Options, { color: '#74EBD5' }]}>{item.name}</Text>
                         <View style={{ flexDirection: 'row', marginVertical: screenHeight * 0.055 }}>
                             {(this.state.highlightedItemId == item.id && this.state.highlightedChoiceId == 0)
@@ -228,7 +173,7 @@ export default class HomePage extends Component {
                                             : <Text style={styles.Options}>{item.name}</Text>
                         }
                     </View>
-            }
+                }
             </TouchableOpacity>
         )
     }
@@ -256,12 +201,16 @@ export default class HomePage extends Component {
                         <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'top' }}>
                             {(this.state.selectedMood1 != 'Mood1' && this.state.selectedMood2 != 'Mood2' && this.state.selectedGenre != 'Genre'
                                 && this.state.selectedLength != 'Length' && this.state.selectedFreedom != 'Robotic Freedom')
-                                ? <View style={[styles.NextStep, { borderColor: '#74EBD5' }]}>
-                                    <Text style={[styles.NextFont, { color: '#74EBD5' }]}>Next</Text>
-                                </View>    
-                                : <View style={styles.NextStep}>
-                                    <Text style={styles.NextFont}>Next</Text>
-                                </View>     
+                                ? <TouchableOpacity onPress={()=>this.props.navigation.navigate('FinishPage')}>
+                                    <View style={[styles.NextStep, { borderColor: '#74EBD5' }]}>
+                                        <Text style={[styles.NextFont, { color: '#74EBD5' }]}>Next</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                : <TouchableOpacity>
+                                    <View style={styles.NextStep}>
+                                        <Text style={styles.NextFont}>Next</Text>
+                                    </View>
+                                </TouchableOpacity>
                             }
                         </View>
                     </View>
