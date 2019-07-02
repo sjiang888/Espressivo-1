@@ -255,11 +255,17 @@ export default class HomePage extends Component {
                                 keyExtractor={extractKey}
                             />
                         </View>
-                        <View style={{ flex: 1.2, alignItems: 'center', justifyContent: 'flex-start', marginTop: screenHeight * 0.02 }} onPress={() => this.props.navigation.navigate('Customization')}>
+                        <View style={{ flex: 1.2,backgroundColor:'transparent',alignItems: 'center', justifyContent: 'flex-start', marginTop: screenHeight * 0.02 }} onPress={() => this.props.navigation.navigate('Customization')}>
                             <TouchableOpacity onPress={() => this.props.navigation.navigate('RecordingPage')}>
-                                <View style={styles.outerCircle}>
+                                {/* <View style={styles.outerCircle}>
                                     <View style={styles.circle}>
                                     </View>
+                                </View> */}
+                                <View style={{flex:1,alignItems:'center',justifyContent:'flex-end',marginBottom:0.03*screenHeight}}>
+                                    <ImageBackground source={require('./assets/images/Blur.png')} style={[styles.BlurIcon,{alignItems:'center',justifyContent:'center'}]}>
+                                        <View style={[styles.circle]}>
+                                        </View>
+                                    </ImageBackground>
                                 </View>
                             </TouchableOpacity>
                         </View>

@@ -69,6 +69,14 @@ const styles = StyleSheet.create({
         borderColor: '#70727D',
         alignItems: 'center', justifyContent: 'center'
     },
+    NextStepSmall:{
+        width: (160 / 375) * screenWidth,
+        height: 50,
+        borderRadius: 50 / 2,
+        borderWidth: 1,
+        borderColor: '#70727D',
+        alignItems: 'center', justifyContent: 'center'
+    },
     NextFont: {
         fontSize: 32,
         fontWeight: 'bold',
@@ -96,6 +104,12 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#A8F5FF',
 
+    },
+    BlurIcon:{
+        height: 0.2 * screenWidth+40,
+        width: 0.2 * screenWidth+40,
+        // borderColor:'green',
+        // borderWidth:2
     },
     etcIcon: {
         height: screenHeight * 0.03 * 5 / 20,
