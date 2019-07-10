@@ -12,7 +12,7 @@ export default class FinishPage extends Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
-                <LinearGradient colors={['#141E30', '#243B55']} style={{ flex: 1 }}>
+                <LinearGradient colors={['#1C1A40', '#171430']} style={{ flex: 1 }}>
                     <StatusBar barStyle='light-content' />
                     <View style={{ flex: 1 }}>
                         <View style={{ flex: 1, justifyContent: 'flex-end', paddingLeft: 0.05 * screenWidth, paddingBottom: 0.01 * screenHeight }}>

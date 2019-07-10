@@ -5,7 +5,7 @@ const screenWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
     Title: {
-        fontSize: 36,
+        fontSize: 42,
         fontWeight: 'bold',
         fontFamily: 'Helvetica Neue',
         color: 'white',
@@ -118,6 +118,10 @@ const styles = StyleSheet.create({
     ExportIcon: {
         height: screenHeight * 0.03 * 20 / 20,
         width: screenHeight * 0.03,
+    },
+    Converting: {
+        height: screenHeight * (150/812)* 20 / 20,
+        width: screenHeight * (150/812),
     },
     slider: {
         height: 2,

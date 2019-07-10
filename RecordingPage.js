@@ -10,7 +10,7 @@ export default class RecordingPage extends Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
-                <LinearGradient colors={['#141E30', '#243B55']} style={{ flex: 1 }}>
+                <LinearGradient colors={['#1C1A40', '#171430']} style={{ flex: 1 }}>
                     <View style={{ flex: 2 }}>
                         <View style={{ height: 0.4 * screenHeight, backgroundColor: 'green' }}>
 
